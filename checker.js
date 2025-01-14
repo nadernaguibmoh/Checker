@@ -63,42 +63,31 @@
                 document.head.appendChild(script);
               
                 script.onload = async () => {
-                  // Run axe-core on the current page
-                  const results = await axe.run();
-              
-                  // Calculate accessibility score as a percentage
-                  const totalRulesChecked = results.passes.length + results.violations.length + results.inapplicable.length;
-                  const rulesWithIssues = results.violations.length;
-                  const scorePercentage = totalRulesChecked === 0 ? 100 : ((totalRulesChecked - rulesWithIssues) / totalRulesChecked) * 100;
-              
-                  // Create result display container
-                  const resultContainer = document.createElement('div');
-                  resultContainer.style.position = 'fixed';
-                  resultContainer.style.bottom = '20px';
-                  resultContainer.style.right = '20px';
-                  resultContainer.style.backgroundColor = '#fff';
-                  resultContainer.style.padding = '15px';
-                  resultContainer.style.border = '1px solid #ccc';
-                  resultContainer.style.borderRadius = '5px';
-                  resultContainer.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
-                  resultContainer.style.zIndex = '9999';
-                  resultContainer.innerHTML = `
-                    <h3>Accessibility Report</h3>
-                    <p>Accessibility Score: ${Math.round(scorePercentage)}%</p>
-                    <p>Passed Checks: ${results.passes.length}</p>
-                    <p>Violations Found: ${results.violations.length}</p>
-                  `;
-              
-                  // Add detailed violations if any
-                  if (results.violations.length > 0) {
-                    const violationsList = results.violations.map(v => `<li>${v.description} - <a href="${v.helpUrl}" target="_blank">Learn More</a></li>`).join('');
-                    const violationsSection = document.createElement('ul');
-                    violationsSection.innerHTML = violationsList;
-                    resultContainer.appendChild(violationsSection);
-                  }
-
-                  popup.innerHTML(resultContainer);
-                };
+                    // Run axe-core on the current page
+                    const results = await axe.run();
+                  
+                    // Calculate accessibility score as a percentage
+                    const totalRulesChecked = results.passes.length + results.violations.length + results.inapplicable.length;
+                    const rulesWithIssues = results.violations.length;
+                    const scorePercentage = totalRulesChecked === 0 ? 100 : ((totalRulesChecked - rulesWithIssues) / totalRulesChecked) * 100;
+                  
+                    // Clear existing content inside the popup
+                    popup.innerHTML = `
+                      <h3>Accessibility Report</h3>
+                      <p>Accessibility Score: ${Math.round(scorePercentage)}%</p>
+                      <p>Passed Checks: ${results.passes.length}</p>
+                      <p>Violations Found: ${results.violations.length}</p>
+                    `;
+                  
+                    // Add detailed violations if any
+                    if (results.violations.length > 0) {
+                      const violationsList = results.violations.map(v => `<li>${v.description} - <a href="${v.helpUrl}" target="_blank">Learn More</a></li>`).join('');
+                      const violationsSection = document.createElement('ul');
+                      violationsSection.innerHTML = violationsList;
+                      popup.appendChild(violationsSection);  // Append details to the popup
+                    }
+                  };
+                  
             })();
 
         };
