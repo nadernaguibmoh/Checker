@@ -1,4 +1,4 @@
-(function() {
+(function () {
     // Extract the API key from the script tag's src attribute
     const scriptTag = document.currentScript;
     const urlParams = new URLSearchParams(scriptTag.src.split('?')[1]);
@@ -24,7 +24,7 @@
     checkerButton.style.fontWeight = 'bold';
     document.body.appendChild(checkerButton);
 
-    checkerButton.onclick = function() {
+    checkerButton.onclick = function () {
         openPopup();
     };
 
@@ -54,53 +54,56 @@
         overlay.appendChild(popup);
 
         const checkButton = popup.querySelector('#checkButton');
-        checkButton.onclick = function() {
-            // fetch(`https://yourserver.com/api/check-number?key=${apiKey}`)
-            //     .then(response => {
-            //         if (!response.ok) {
-            //             throw new Error('Failed to fetch the number.');
-            //         }
-            //         return response.json();
-            //     })
-            //     .then(data => {
-            //         if (data.number !== undefined) {
-            //             checkButton.innerText = `Number: ${data.number}`;
-            //             checkButton.style.backgroundColor = '#28a745'; // Green for success
-            //         } else {
-            //             console.error('Invalid response format.');
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error('Error fetching number:', error);
-            //         checkButton.innerText = 'Error';
-            //         checkButton.style.backgroundColor = '#dc3545'; // Red for error
-            //     });
+        checkButton.onclick = function () {
 
-             (async () => {
-            // Load axe-core from a CDN
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.6.1/axe.min.js';
-        document.head.appendChild(script);
+            (async () => {
+                // Load axe-core from a CDN
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.6.1/axe.min.js';
+                document.head.appendChild(script);
+              
+                script.onload = async () => {
+                  // Run axe-core on the current page
+                  const results = await axe.run();
+              
+                  // Calculate accessibility score as a percentage
+                  const totalRulesChecked = results.passes.length + results.violations.length + results.inapplicable.length;
+                  const rulesWithIssues = results.violations.length;
+                  const scorePercentage = totalRulesChecked === 0 ? 100 : ((totalRulesChecked - rulesWithIssues) / totalRulesChecked) * 100;
+              
+                  // Create result display container
+                  const resultContainer = document.createElement('div');
+                  resultContainer.style.position = 'fixed';
+                  resultContainer.style.bottom = '20px';
+                  resultContainer.style.right = '20px';
+                  resultContainer.style.backgroundColor = '#fff';
+                  resultContainer.style.padding = '15px';
+                  resultContainer.style.border = '1px solid #ccc';
+                  resultContainer.style.borderRadius = '5px';
+                  resultContainer.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+                  resultContainer.style.zIndex = '9999';
+                  resultContainer.innerHTML = `
+                    <h3>Accessibility Report</h3>
+                    <p>Accessibility Score: ${Math.round(scorePercentage)}%</p>
+                    <p>Passed Checks: ${results.passes.length}</p>
+                    <p>Violations Found: ${results.violations.length}</p>
+                  `;
+              
+                  // Add detailed violations if any
+                  if (results.violations.length > 0) {
+                    const violationsList = results.violations.map(v => `<li>${v.description} - <a href="${v.helpUrl}" target="_blank">Learn More</a></li>`).join('');
+                    const violationsSection = document.createElement('ul');
+                    violationsSection.innerHTML = violationsList;
+                    resultContainer.appendChild(violationsSection);
+                  }
 
-        script.onload = async () => {
-        console.log('axe-core loaded. Running accessibility checks...');
-      
-        const results = await axe.run();
-      
-        // Display results in the console
-        console.log('Accessibility audit results:', results);
+                  popup.appendChild(resultContainer);
+                };
+            })();
 
-          // Example: Show a popup with issues count
-          alert(`Accessibility issues found: ${results.violations.length}`);
-    };
-  })();
-
-            popup.innerHTML = `
-            <h3>Score: 1</h3>
-        `;
         };
 
-        overlay.onclick = function(event) {
+        overlay.onclick = function (event) {
             if (event.target === overlay) {
                 overlay.remove();
             }
