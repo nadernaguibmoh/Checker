@@ -22,6 +22,7 @@
     checkerButton.style.borderRadius = '5px';
     checkerButton.style.fontSize = '16px';
     checkerButton.style.fontWeight = 'bold';
+    checkerButton.style.zIndex = '100000';
     document.body.appendChild(checkerButton);
 
     checkerButton.onclick = function () {
@@ -39,6 +40,7 @@
         overlay.style.display = 'flex';
         overlay.style.justifyContent = 'center';
         overlay.style.alignItems = 'center';
+        overlay.style.zIndex = '90000';
         document.body.appendChild(overlay);
 
         const popup = document.createElement('div');
@@ -47,6 +49,7 @@
         popup.style.borderRadius = '10px';
         popup.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
         popup.style.textAlign = 'center';
+        popup.style.zIndex = '100000';
         popup.innerHTML = `
             <h3>Check Score</h3>
             <button id="checkButton" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Check</button>
