@@ -67,6 +67,7 @@
                     const results = await axe.run();
                   
                     // Calculate accessibility score as a percentage
+                    console.log('Results : ', results);
                     const totalRulesChecked = results.passes.length + results.violations.length + results.inapplicable.length;
                     const rulesWithIssues = results.violations.length;
                     const scorePercentage = totalRulesChecked === 0 ? 100 : ((totalRulesChecked - rulesWithIssues) / totalRulesChecked) * 100;
