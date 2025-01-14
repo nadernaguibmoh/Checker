@@ -97,7 +97,7 @@
                     resultContainer.appendChild(violationsSection);
                   }
 
-                  popup.appendChild(resultContainer);
+                  popup.innerHTML(resultContainer);
                 };
             })();
 
