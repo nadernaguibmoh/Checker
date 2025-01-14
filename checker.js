@@ -76,6 +76,24 @@
             //         checkButton.style.backgroundColor = '#dc3545'; // Red for error
             //     });
 
+             (async () => {
+            // Load axe-core from a CDN
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.6.1/axe.min.js';
+        document.head.appendChild(script);
+
+        script.onload = async () => {
+        console.log('axe-core loaded. Running accessibility checks...');
+      
+        const results = await axe.run();
+      
+        // Display results in the console
+        console.log('Accessibility audit results:', results);
+
+          // Example: Show a popup with issues count
+          alert(`Accessibility issues found: ${results.violations.length}`);
+    };
+  })();
 
             popup.innerHTML = `
             <h3>Score: 1</h3>
